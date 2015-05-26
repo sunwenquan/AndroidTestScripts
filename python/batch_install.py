@@ -26,15 +26,25 @@ def check_dir():
         return True
     else:
         return False
-
+        
+#检查安装结果
+def check_install(outtext):
+    if "Success" in outtext:
+        return True
+    else:
+        return False
+        
 #安装应用
 def install():
     count = 0
     apps_dir = "%s\\Apps" %os.getcwd()
     for path, subdir, files in os.walk(apps_dir):
         for apk in files:
-            os.popen("%s\\AndroidAdb\\AndroidAdb.exe install %s" %(os.getcwd(), os.path.join(path, apk)))
-            count += 1
+            outtext=os.popen("%s\\AndroidAdb\\AndroidAdb.exe install %s" %(os.getcwd(), os.path.join(path, apk)))
+            if check_install(outtext.read()):
+                count += 1
+            else:
+                print ("%s installation failed!" %apk)
 
     print "\n%s apps install complete." %str(count)
 
